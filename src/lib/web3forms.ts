@@ -43,8 +43,8 @@ export async function submitLead(payload: LeadPayload): Promise<LeadResult> {
       },
       body: JSON.stringify({
         access_key: WEB3FORMS_KEY,
-        subject: `New lead from swat dev — ${payload.name}`,
-        from_name: "swat dev website",
+        subject: `New lead from anorwe: ${payload.name}`,
+        from_name: "anorwe website",
         name: payload.name,
         email: payload.email,
         company: payload.company || "—",

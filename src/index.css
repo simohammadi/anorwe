@@ -12,22 +12,100 @@ html,
 body,
 #root {
   min-height: 100%;
-  background: #070708;
+  background: #0d1420;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Thin grayscale scrollbar to match the dark UI */
+/* Layers: backdrop and stars, then content, header scrim, the live sun, the header. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, #0b111c 0%, #0d1420 45%, #161322 100%);
+}
+.stars {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.scrim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 130px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(11, 17, 28, 0.97) 0%, rgba(11, 17, 28, 0.95) 66%, rgba(11, 17, 28, 0) 100%);
+}
+.sky {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.sky canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Where the sun rests in the hero. On phones it gets its own space below the copy. */
+.sun-anchor {
+  --r: min(16svh, 11vw);
+  position: absolute;
+  left: calc(76% - var(--r));
+  top: calc(52% - var(--r));
+  width: calc(var(--r) * 2);
+  height: calc(var(--r) * 2);
+  border-radius: 50%;
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .scrim {
+    height: 108px;
+  }
+  /* The copy keeps a minimum gap for the corona; any spare height goes above the sun. */
+  .hero-copy {
+    margin-bottom: 26vw;
+  }
+  .sun-anchor {
+    --r: min(20vw, 96px);
+    position: relative;
+    left: auto;
+    top: auto;
+    flex-shrink: 0;
+    margin: auto 0 0 calc(66% - var(--r));
+  }
+}
+
+/* Static fallback: the Horizon logo rests where the live sun would, its disc filling the anchor. */
+html.static .scroll-hint {
+  display: none;
+}
+.static-mark {
+  position: absolute;
+  left: calc(var(--r) * -0.136);
+  top: calc(var(--r) * -0.045);
+  width: calc(var(--r) * 2.273);
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #070708;
+  background: #0d1420;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272b;
+  background: #26303f;
   border-radius: 8px;
-  border: 2px solid #070708;
+  border: 2px solid #0d1420;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a3a40;
+  background: #36425a;
 }

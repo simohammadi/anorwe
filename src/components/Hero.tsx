@@ -1,134 +1,93 @@
-import { Box, Button, Container, HStack, Stack, Text } from "@chakra-ui/react"
-import HeroCanvas from "@/components/HeroCanvas"
-import { hero, stats } from "@/content/site"
+import { Box, Button, chakra, Container, Flex, Heading, Stack, Text } from "@chakra-ui/react"
+import { hero } from "@/content/site"
+import { staticMode } from "@/lib/sky"
+import { Eyebrow } from "@/components/Section"
+import { Mark } from "@/components/Logo"
 
 export function Hero() {
   return (
-    <Box
+    <Flex
       as="section"
       id="top"
       position="relative"
-      minH="100vh"
-      display="flex"
-      alignItems={{ base: "flex-start", md: "center" }}
-      pt={{ base: "104px", md: "0" }}
-      overflow="hidden"
+      direction="column"
+      minH={{ base: "100svh", md: "max(100svh, 640px)" }}
+      pt={{ base: "120px", md: "24svh" }}
+      pb={{ base: "8vw", md: 0 }}
+      className="hero"
     >
-      {/* Flow-field animation backdrop */}
-      <HeroCanvas style={{ position: "absolute", inset: 0, zIndex: 0 }} />
-
-      {/* Fade the animation into the page below */}
-      <Box
-        position="absolute"
-        inset="0"
-        zIndex="1"
-        pointerEvents="none"
-        bgGradient="to-b"
-        gradientFrom="transparent"
-        gradientVia="transparent"
-        gradientTo="#070708"
-      />
-
-      <Container
-        maxW="6xl"
-        mx="auto"
-        px={{ base: 5, md: 8 }}
-        position="relative"
-        zIndex="2"
-      >
-        <Stack gap={{ base: 8, md: 10 }} maxW="4xl">
-          <HStack
-            gap="2"
-            alignSelf="flex-start"
-            px="3"
-            py="1.5"
-            rounded="full"
-            border="1px solid"
-            borderColor="border"
-            bg="rgba(255,255,255,0.02)"
+      <Container className="hero-copy" maxW="6xl" mx="auto" px={{ base: 5, md: 8 }} position="relative" zIndex="1">
+        <Stack gap="0" maxW={{ base: "full", md: "620px" }}>
+          <Eyebrow>{hero.eyebrow}</Eyebrow>
+          <Heading
+            as="h1"
+            mt={{ base: 4, md: 5 }}
+            fontSize={{ base: "clamp(44px, 12.5vw, 60px)", md: "clamp(56px, 7vw, 104px)" }}
+            fontWeight="500"
+            lineHeight="1.04"
+            letterSpacing="-0.015em"
           >
-            <Box w="6px" h="6px" rounded="full" bg="ink.200" />
-            <Text fontSize="sm" color="ink.300" letterSpacing="0.01em">
-              {hero.eyebrow}
-            </Text>
-          </HStack>
-
-          <Stack gap="0">
-            {hero.titleLines.map((line, i) => (
-              <Text
-                key={i}
-                as="span"
-                fontSize={{ base: "5xl", md: "7xl", lg: "8xl" }}
-                fontWeight="700"
-                lineHeight="1.05"
-                letterSpacing="-0.03em"
-                color={i === hero.titleLines.length - 1 ? "ink.400" : "ink.50"}
-              >
-                {line}
-              </Text>
-            ))}
-          </Stack>
-
+            {hero.title}{" "}
+            <chakra.em fontStyle="italic" fontWeight="300" color="flare">
+              {hero.titleAccent}
+            </chakra.em>
+          </Heading>
           <Text
-            fontSize={{ base: "lg", md: "xl" }}
-            color="ink.300"
-            maxW="2xl"
+            mt={{ base: 5, md: 7 }}
+            maxW="440px"
+            fontSize={{ base: "md", md: "lg" }}
             lineHeight="1.6"
+            color="rgba(246,236,221,0.82)"
           >
             {hero.subtitle}
           </Text>
-
-          <HStack gap="4" flexWrap="wrap">
+          <Flex mt={{ base: 7, md: 9 }} align="center" gap={{ base: 5, md: 7 }} wrap="wrap">
             <Button
               asChild
               size="lg"
-              bg="ink.50"
-              color="ink.950"
-              fontWeight="600"
               rounded="full"
-              px="8"
-              _hover={{ bg: "white" }}
-            >
-              <a href="#contact">{hero.primaryCta}</a>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              borderColor="border"
-              color="ink.100"
+              px="6"
+              bg="bone"
+              color="char"
               fontWeight="500"
-              rounded="full"
-              px="8"
-              _hover={{ bg: "rgba(255,255,255,0.04)", borderColor: "ink.500" }}
+              _hover={{ bg: "flare" }}
             >
-              <a href="#work">{hero.secondaryCta}</a>
+              <a href="#contact" data-intent="">
+                {hero.primaryCta}
+              </a>
             </Button>
-          </HStack>
-
-          <HStack
-            gap={{ base: 6, md: 12 }}
-            pt={{ base: 4, md: 8 }}
-            flexWrap="wrap"
-          >
-            {stats.map((stat) => (
-              <Stack key={stat.label} gap="0">
-                <Text
-                  fontSize={{ base: "2xl", md: "3xl" }}
-                  fontWeight="700"
-                  color="ink.50"
-                  letterSpacing="-0.02em"
-                >
-                  {stat.value}
-                </Text>
-                <Text fontSize="sm" color="ink.400">
-                  {stat.label}
-                </Text>
-              </Stack>
-            ))}
-          </HStack>
+            <chakra.a
+              href="#process"
+              fontWeight="500"
+              color="fg.muted"
+              transition="color 0.2s"
+              _hover={{ color: "bone" }}
+            >
+              {hero.secondaryCta}
+            </chakra.a>
+          </Flex>
         </Stack>
       </Container>
-    </Box>
+
+      {/* Where the sun rests before you scroll; the live sun reads its box, static mode shows the logo in it. */}
+      <Box id="sun-anchor" className="sun-anchor" aria-hidden="true">
+        {staticMode && <Mark className="static-mark" />}
+      </Box>
+
+      <Box
+        className="scroll-hint"
+        display={{ base: "none", md: "block" }}
+        position="absolute"
+        bottom="8"
+        left="0"
+        right="0"
+      >
+        <Container maxW="6xl" mx="auto" px="8">
+          <Text fontFamily="mono" fontSize="xs" letterSpacing="0.12em" textTransform="uppercase" color="fg.muted">
+            {hero.scrollHint}
+          </Text>
+        </Container>
+      </Box>
+    </Flex>
   )
 }

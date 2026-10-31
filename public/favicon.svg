@@ -1,13 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#070708"/>
-  <rect width="64" height="64" rx="14" fill="url(#g)" fill-opacity="0.12"/>
-  <text x="50%" y="50%" dy="0.02em" text-anchor="middle" dominant-baseline="central"
-    font-family="Inter, -apple-system, Segoe UI, sans-serif" font-size="34" font-weight="700" fill="#e6e6e8">s</text>
-  <circle cx="46" cy="42" r="3.2" fill="#a3a3a9"/>
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="64" y2="64">
-      <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="1" stop-color="#52525a"/>
-    </linearGradient>
+    <mask id="cut" maskUnits="userSpaceOnUse" x="0" y="0" width="64" height="64">
+      <rect width="64" height="64" fill="#fff"/>
+      <rect y="27" width="64" height="2.2" fill="#000"/>
+      <rect y="32" width="64" height="2.8" fill="#000"/>
+      <rect y="36.8" width="64" height="3.6" fill="#000"/>
+      <rect y="44.6" width="64" height="20" fill="#000"/>
+    </mask>
   </defs>
+  <rect width="64" height="64" rx="14" fill="#0d1420"/>
+  <circle cx="32" cy="43" r="26" fill="#e2662a" mask="url(#cut)"/>
+  <rect x="5" y="45.6" width="54" height="2.8" rx="1.4" fill="#e9b98a"/>
 </svg>

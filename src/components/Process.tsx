@@ -1,60 +1,40 @@
-import { Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react"
-import { processSteps } from "@/content/site"
-import { Section } from "@/components/Section"
+import { Box, Heading, SimpleGrid, Text } from "@chakra-ui/react"
+import { processIntro, processSteps } from "@/content/site"
+import { Section, SectionHeader } from "@/components/Section"
 
 export function Process() {
   return (
     <Section id="process">
-      <Stack gap={{ base: 10, md: 16 }} align="center">
-        <Stack gap="4" maxW="2xl" align="center" textAlign="center">
-          <Text
-            fontSize="sm"
-            fontWeight="600"
-            letterSpacing="0.08em"
-            textTransform="uppercase"
-            color="ink.500"
-          >
-            How we work
-          </Text>
-          <Heading
-            as="h2"
-            fontSize={{ base: "3xl", md: "5xl" }}
-            fontWeight="700"
-            lineHeight="1.15"
-            letterSpacing="-0.02em"
-            color="ink.50"
-          >
-            A path from idea to impact
-          </Heading>
-        </Stack>
-
-        <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} gap={{ base: 6, md: 5 }}>
-          {processSteps.map((step, i) => (
-            <Stack
-              key={step.title}
-              gap="4"
-              pt="6"
-              borderTop="1px solid"
-              borderColor="border"
-            >
-              <Text
-                fontSize="sm"
-                fontWeight="600"
-                color="ink.500"
-                fontVariantNumeric="tabular-nums"
-              >
-                {String(i + 1).padStart(2, "0")}
-              </Text>
-              <Heading as="h3" fontSize="lg" fontWeight="600" color="ink.50">
-                {step.title}
-              </Heading>
-              <Text fontSize="sm" color="ink.300" lineHeight="1.6">
-                {step.description}
-              </Text>
-            </Stack>
-          ))}
-        </SimpleGrid>
-      </Stack>
+      <SectionHeader
+        eyebrow={processIntro.eyebrow}
+        heading={processIntro.heading}
+        subheading={processIntro.subheading}
+      />
+      <SimpleGrid
+        as="ol"
+        listStyle="none"
+        columns={{ base: 1, sm: 2, lg: 4 }}
+        mt={{ base: 10, md: 12 }}
+        rounded="18px"
+        overflow="hidden"
+        border="1px solid"
+        borderColor="border"
+        backdropFilter="blur(16px)"
+      >
+        {processSteps.map((step) => (
+          <Box as="li" key={step.title} bg={step.tint} px="6" pt={{ base: 7, md: 9 }} pb={{ base: 8, md: 10 }} minH={{ lg: "260px" }}>
+            <Text fontFamily="mono" fontSize="xs" letterSpacing="0.12em" textTransform="uppercase" opacity="0.7">
+              {step.time}
+            </Text>
+            <Heading as="h3" fontSize={{ base: "3xl", md: "34px" }} fontWeight="500" lineHeight="1.1" mt="2.5" mb="4">
+              {step.title}
+            </Heading>
+            <Text fontSize="15px" lineHeight="1.6" opacity="0.88" maxW={{ base: "420px", lg: "240px" }}>
+              {step.description}
+            </Text>
+          </Box>
+        ))}
+      </SimpleGrid>
     </Section>
   )
 }

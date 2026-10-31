@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>anorwe — brand direction v0.4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --night: #0d1420;
+    --dusk: #4a7593;
+    --gold: #f6a730;
+    --flare: #ffd27a;
+    --ember: #e2662a;
+    --rust: #b5481f;
+    --canyon: #6e2a14;
+    --sand: #e9b98a;
+    --bone: #f6ecdd;
+    --ink: #1b1410;
+    --line: rgba(246, 236, 221, 0.12);
+    --muted: rgba(246, 236, 221, 0.66);
+    --glass: rgba(13, 20, 32, 0.55);
+    --display: 'Newsreader', Georgia, serif;
+    --body: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: linear-gradient(180deg, #0b111c 0%, #0d1420 40%, #161322 100%) fixed; color: var(--bone); font: 16px/1.6 var(--body); }
+  main { position: relative; z-index: 1; }
+  #stars { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font: 500 15px var(--body); text-decoration: none; border-radius: 999px; padding: 13px 22px; cursor: pointer; border: 0; transition: background .2s, color .2s, border-color .2s; }
+  .btn-primary { background: var(--bone); color: var(--ink); }
+  .btn-primary:hover, .btn-primary:focus-visible { background: var(--flare); }
+  .btn-ghost { color: var(--bone); border: 1px solid rgba(246,236,221,.3); padding: 10px 18px; font-size: 14px; }
+  .btn-ghost:hover, .btn-ghost:focus-visible { border-color: var(--gold); color: var(--flare); }
+  .btn-link { color: var(--muted); text-decoration: none; font: 500 15px var(--body); }
+  .btn-link:hover { color: var(--bone); }
+  .ctas { display: flex; align-items: center; gap: 26px; margin-top: 34px; }
+  .contact-form { display: flex; gap: 10px; justify-content: center; margin-top: 34px; flex-wrap: wrap; }
+  .contact-form input { font: 15px var(--body); color: var(--bone); background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 999px; padding: 13px 20px; width: min(320px, 100%); outline: none; }
+  .contact-form input:focus { border-color: rgba(246,167,48,.6); }
+  .static-sun { display: none; }
+  html.static #sky, html.static .scroll-hint { display: none; }
+  html.static .hero { overflow: hidden; }
+  html.static .static-sun {
+    --r: min(16vh, 11vw);
+    display: block; position: absolute; left: calc(76% - var(--r)); top: calc(52% - var(--r));
+    width: calc(var(--r) * 2); height: calc(var(--r) * 2); border-radius: 50%;
+    background: radial-gradient(circle at 42% 38%, #ffe2a0 0%, #f8a638 42%, #e9782c 78%, #d9561f 100%);
+    box-shadow: 0 0 36px 8px rgba(255,190,90,.45), 0 0 120px 40px rgba(226,102,42,.22), 0 0 260px 90px rgba(226,102,42,.08);
+  }
+  html.static .static-sun::before {
+    content: ''; position: absolute; inset: -70%; border-radius: 50%; z-index: -1;
+    background: repeating-conic-gradient(from 8deg, rgba(255,190,110,.16) 0deg 3deg, transparent 3deg 11deg, rgba(255,170,90,.1) 11deg 13deg, transparent 13deg 23deg);
+    -webkit-mask: radial-gradient(circle, transparent 36%, #000 37%, transparent 70%);
+            mask: radial-gradient(circle, transparent 36%, #000 37%, transparent 70%);
+    filter: blur(3px);
+  }
+  @media (max-width: 700px) {
+    html.static .static-sun { --r: 20vw; left: calc(66% - var(--r)); top: calc(80% - var(--r)); }
+  }
+  .scrim { position: fixed; top: 0; left: 0; right: 0; height: 130px; z-index: 2; pointer-events: none; background: linear-gradient(180deg, rgba(11,17,28,.97) 0%, rgba(11,17,28,.95) 66%, rgba(11,17,28,0) 100%); }
+  #sky { position: fixed; inset: 0; z-index: 3; pointer-events: none; }
+  #sky canvas { width: 100%; height: 100%; display: block; }
+  .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 4; padding: 24px 0; }
+  .site-header .wrap { display: flex; justify-content: space-between; align-items: center; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 32px; }
+  .label { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -.01em; line-height: 1.1; }
+  h2 { font-size: clamp(32px, 4vw, 48px); margin: 14px 0 18px; }
+  h3 { font-size: 22px; margin-bottom: 8px; }
+  p.lead { font-size: 19px; color: var(--muted); max-width: 640px; }
+  section { padding: 120px 0; }
+  .grid { display: grid; gap: 24px; }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 860px) { .g2, .g3, .g4 { grid-template-columns: 1fr; } }
+  .card { border: 1px solid var(--line); border-radius: 18px; padding: 28px; background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  .muted { color: var(--muted); }
+  ul.clean { list-style: none; padding: 0; }
+  ul.clean li { padding: 8px 0; border-bottom: 1px solid var(--line); color: var(--muted); }
+  ul.clean li:last-child { border: 0; }
+
+  .mark { display: inline-block; color: var(--ember); --hline: var(--sand); }
+  .lockup { display: inline-flex; align-items: center; gap: .32em; font: 500 26px/1 var(--display); letter-spacing: -.02em; }
+  .lockup svg { width: 1.5em; height: .84em; }
+
+  /* Hero */
+  .hero { height: 100vh; min-height: 640px; position: relative; padding: 0; }
+  .pill { font: 500 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; border: 1px solid rgba(246,236,221,.3); padding: 9px 14px; border-radius: 999px; }
+  @media (max-width: 700px) { .pill, .scroll-hint { display: none; } }
+  .hero-copy { position: absolute; left: 0; right: 0; top: 24vh; }
+  .hero-copy h1 { font-size: clamp(48px, 7vw, 104px); max-width: 620px; font-weight: 500; }
+  .hero-copy h1 em { font-style: italic; color: var(--flare); font-weight: 300; }
+  .hero-copy p { margin-top: 26px; max-width: 440px; color: rgba(246,236,221,.82); font-size: 18px; }
+  .scroll-hint { position: absolute; bottom: 30px; left: 0; right: 0; font: 12px var(--mono); letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+
+  /* Name */
+  .etym { display: flex; align-items: baseline; gap: 6px; font-family: var(--display); font-size: clamp(48px, 7vw, 96px); margin: 30px 0; }
+  .etym span { padding-bottom: 6px; }
+  .etym .a { color: var(--gold); border-bottom: 2px solid var(--gold); }
+  .etym .b { color: var(--sand); border-bottom: 2px dashed var(--sand); }
+  .etym-notes { display: grid; grid-template-columns: repeat(2, minmax(0, 300px)); gap: 40px; font-size: 14px; color: var(--muted); }
+  .etym-notes b { color: var(--bone); font-weight: 500; }
+
+  .pillar .num { font: 500 13px var(--mono); color: var(--gold); }
+  .pillar h3 { font-size: 30px; margin: 12px 0 10px; }
+  .pillar .svc { margin-top: 18px; font: 12px var(--mono); color: var(--sand); letter-spacing: .04em; }
+
+  .journey { display: grid; grid-template-columns: repeat(4, 1fr); border-radius: 18px; overflow: hidden; margin-top: 40px; border: 1px solid var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+  @media (max-width: 860px) { .journey { grid-template-columns: 1fr; } }
+  .phase { padding: 34px 24px 38px; min-height: 260px; }
+  .phase .t { font: 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+  .phase h3 { font-size: 34px; margin: 10px 0 6px; }
+  .phase .was { font: 12px var(--mono); opacity: .7; margin-bottom: 18px; }
+  .phase p { font-size: 15px; opacity: .88; max-width: 240px; }
+
+  .tag { font-family: var(--display); font-size: 26px; padding: 18px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; gap: 20px; align-items: baseline; }
+  .tag small { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
+  .tag.rec { color: var(--flare); }
+  .do li::before { content: '+  '; color: var(--gold); }
+  .dont li::before { content: '–  '; color: var(--ember); }
+
+  .logo-hero { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; margin-top: 36px; }
+  @media (max-width: 860px) { .logo-hero { grid-template-columns: 1fr; } }
+  .tile { border-radius: 18px; display: grid; place-items: center; position: relative; padding: 40px; }
+  .tile .cap { position: absolute; left: 20px; bottom: 16px; font: 12px var(--mono); letter-spacing: .08em; }
+  .chosen { position: absolute; top: 16px; left: 20px; font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; background: var(--gold); color: var(--ink); padding: 5px 10px; border-radius: 999px; }
+  .favs { display: flex; align-items: end; gap: 22px; }
+
+  .swatch { border-radius: 16px; height: 140px; padding: 16px; display: flex; flex-direction: column; justify-content: flex-end; font: 12px var(--mono); }
+  .swatch b { font: 500 15px var(--body); display: block; margin-bottom: 2px; }
+
+  .type-spec { display: grid; grid-template-columns: 220px 1fr; gap: 24px; padding: 30px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+  @media (max-width: 860px) { .type-spec { grid-template-columns: 1fr; } }
+
+  .fx { display: grid; grid-template-columns: 1fr auto; gap: 6px 20px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .fx h4 { font: 500 17px var(--body); }
+  .fx p { grid-column: 1; font-size: 14px; color: var(--muted); }
+  .fx .lvl { grid-row: 1 / span 2; grid-column: 2; align-self: center; font: 11px var(--mono); letter-spacing: .1em; text-transform: uppercase; padding: 6px 10px; border-radius: 999px; }
+  .lvl.core { background: var(--gold); color: var(--ink); }
+  .lvl.plus { border: 1px solid var(--gold); color: var(--gold); }
+  .lvl.later { border: 1px solid var(--line); color: var(--muted); }
+
+  .finale { padding: 140px 0 100px; text-align: center; border-top: 1px solid var(--line); }
+  .finale h2 { font-size: clamp(36px, 5vw, 64px); }
+  .finale h2 em { font-style: italic; font-weight: 300; color: var(--flare); }
+  .finale .meta { font: 12px var(--mono); letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <mask id="horizon-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="120" height="120">
+      <rect width="120" height="120" fill="#fff"/>
+      <rect x="0" y="49.5" width="120" height="3" fill="#000"/>
+      <rect x="0" y="57.7" width="120" height="4.4" fill="#000"/>
+      <rect x="0" y="65.7" width="120" height="5.7" fill="#000"/>
+      <rect x="0" y="78.6" width="120" height="42" fill="#000"/>
+    </mask>
+    <symbol id="horizon" viewBox="10 30 100 56">
+      <circle cx="60" cy="76" r="44" fill="currentColor" mask="url(#horizon-cut)"/>
+      <rect x="12" y="80" width="96" height="4" rx="2" fill="var(--hline)"/>
+    </symbol>
+    <symbol id="horizon-line" viewBox="10 30 100 56">
+      <rect x="12" y="80" width="96" height="4" rx="2" fill="var(--hline)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<canvas id="stars"></canvas>
+<div class="scrim"></div>
+<div id="sky"></div>
+<header class="site-header">
+  <div class="wrap">
+    <span class="lockup"><svg class="mark" id="dock"><use href="#horizon-line"/></svg>anorwe</span>
+    <a class="btn btn-ghost" href="#contact" data-intent>Let's talk</a>
+  </div>
+</header>
+
+<main>
+<header class="hero">
+  <div class="static-sun" aria-hidden="true"></div>
+  <div class="hero-copy">
+    <div class="wrap">
+      <div class="label">AI consulting &amp; engineering</div>
+      <h1 style="margin-top:18px">Clarity first. <em>Then momentum.</em></h1>
+      <p>Senior engineers who bring your AI projects into the light, then turn them into systems that ship.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="#contact" data-intent>Start a project</a>
+        <a class="btn-link" href="#work">See our work</a>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint"><div class="wrap">Scroll · the sun becomes the logo</div></div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="label">01 · The name</div>
+    <h2>One who carries the sun.</h2>
+    <div class="etym"><span class="a">Anor</span><span class="b">wë</span></div>
+    <div class="etym-notes">
+      <div><b>Anor</b> — "sun" in Sindarin, Tolkien's Elvish. The light that rises in the east.</div>
+      <div><b>-wë</b> — an Elvish name-ending, as in Finwë and Ingwë. It reads as a person, not a thing.</div>
+    </div>
+    <p class="lead" style="margin-top:36px">anorwe is <em>the one who carries the sun</em>. That's our role: we step into the dark corners of a project, where the data is messy, the ROI is unclear and nobody trusts the prototype yet. We make them visible, then give them energy.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">02 · Brand idea</div>
+    <h2>Light makes things visible.<br/>Then it makes them grow.</h2>
+    <p class="lead">Three things the sun does, mapped onto the work we already sell.</p>
+    <div class="grid g3" style="margin-top:44px">
+      <div class="card pillar">
+        <div class="num">I</div>
+        <h3>Illuminate</h3>
+        <p class="muted">Clarity first. We shine light on where AI pays off, what your data can carry, and what's hype.</p>
+        <div class="svc">AI STRATEGY · DATA &amp; EVALUATION</div>
+      </div>
+      <div class="card pillar">
+        <div class="num">II</div>
+        <h3>Radiate</h3>
+        <p class="muted">Then momentum. Agents and retrieval systems that surface what's been buried in your documents and workflows.</p>
+        <div class="svc">LLM &amp; AGENTS · RAG &amp; KNOWLEDGE</div>
+      </div>
+      <div class="card pillar">
+        <div class="num">III</div>
+        <h3>Sustain</h3>
+        <p class="muted">The sun rises every day. Platforms that keep running, get cheaper, and stay observable long after handoff.</p>
+        <div class="svc">ML PLATFORM · FINE-TUNING</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">03 · The story arc</div>
+    <h2>From dawn to daylight.</h2>
+    <p class="lead">The process is one sunrise, from first light to full day.</p>
+    <div class="journey">
+      <div class="phase" style="background:rgba(29,26,42,.6)">
+        <div class="t">05:40</div><h3>Dawn</h3><div class="was">was: Discover</div>
+        <p>First light. We map the highest-value use cases and define what success looks like.</p></div>
+      <div class="phase" style="background:rgba(122,58,42,.55)">
+        <div class="t">07:15</div><h3>Rise</h3><div class="was">was: Prototype</div>
+        <p>A working prototype in weeks, proven on your real data.</p></div>
+      <div class="phase" style="background:rgba(181,98,47,.5)">
+        <div class="t">12:00</div><h3>Zenith</h3><div class="was">was: Productionize</div>
+        <p>Full strength. Guardrails, monitoring and eval gates so it survives real users.</p></div>
+      <div class="phase" style="background:rgba(74,117,147,.5)">
+        <div class="t">All day</div><h3>Daylight</h3><div class="was">was: Scale</div>
+        <p>Your team runs it in the open. We optimize, hand off, and stay close.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">04 · Voice</div>
+    <h2>Warm, clear, a little poetic.<br/>Never fantasy cosplay.</h2>
+    <div class="grid g2" style="margin-top:36px; gap:56px">
+      <div>
+        <div class="tag rec">Clarity first. Then momentum. <small>HERO · CHOSEN</small></div>
+        <div class="tag">We bring your AI projects into the light. <small>SUPPORTING</small></div>
+        <div class="tag">Every project deserves daylight. <small>SHORT LINE</small></div>
+        <div class="tag">Brought to light. <small>CASE STUDIES</small></div>
+        <div class="tag">Let's light it up. <small>CONTACT CTA</small></div>
+      </div>
+      <div class="grid g2" style="align-content:start">
+        <div><h3>Do</h3><ul class="clean do">
+          <li>One light metaphor per section, max</li>
+          <li>Plain engineering language in the body</li>
+          <li>Numbers and outcomes over adjectives</li>
+          <li>Let the sun carry the myth</li>
+        </ul></div>
+        <div><h3>Don't</h3><ul class="clean dont">
+          <li>Elvish script, quotes or character names</li>
+          <li>"Harness the power of the sun"</li>
+          <li>Medieval / epic-fantasy wording</li>
+          <li>Glow and flare on every element</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">05 · Logo</div>
+    <h2>Horizon.</h2>
+    <p class="lead">A mid-century sun cut by three bands, resting on a horizon. The bands narrow upward like light breaking through. When you scroll, the live 3D sun docks into the header and becomes this mark.</p>
+    <div class="logo-hero">
+      <div class="tile" style="background:var(--night); border:1px solid var(--line); min-height:360px">
+        <span class="chosen">Chosen</span>
+        <span class="lockup" style="font-size:64px"><svg class="mark"><use href="#horizon"/></svg>anorwe</span>
+        <span class="cap" style="color:var(--muted)">PRIMARY LOCKUP · ON NIGHT</span>
+      </div>
+      <div class="grid" style="gap:24px">
+        <div class="tile" style="background:var(--sand)">
+          <span class="lockup" style="font-size:36px;color:var(--ink)"><svg class="mark" style="--hline:var(--canyon)"><use href="#horizon"/></svg>anorwe</span>
+          <span class="cap" style="color:var(--canyon)">ON SAND</span>
+        </div>
+        <div class="tile" style="background:var(--ember)">
+          <span class="lockup" style="font-size:36px;color:var(--night)"><svg class="mark" style="color:var(--night);--hline:var(--night)"><use href="#horizon"/></svg>anorwe</span>
+          <span class="cap" style="color:var(--night)">MONO · ON EMBER</span>
+        </div>
+        <div class="tile" style="border:1px solid var(--line); background:var(--glass)">
+          <div class="favs">
+            <svg class="mark" style="width:96px;height:54px"><use href="#horizon"/></svg>
+            <svg class="mark" style="width:48px;height:27px"><use href="#horizon"/></svg>
+            <svg class="mark" style="width:28px;height:16px"><use href="#horizon"/></svg>
+          </div>
+          <span class="cap" style="color:var(--muted)">ICON · FAVICON SIZES</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">06 · Colour</div>
+    <h2>Night, with a sun in it.</h2>
+    <p class="lead">Night carries the page so the sun can glow. Warm desert tones come from your reference and are used for accents and illustration.</p>
+    <div class="grid g4" style="margin-top:36px">
+      <div class="swatch" style="background:#0d1420;border:1px solid var(--line)"><b>Night</b>#0D1420 · page background</div>
+      <div class="swatch" style="background:#f6ecdd;color:#1b1410"><b>Bone</b>#F6ECDD · text on dark</div>
+      <div class="swatch" style="background:#f6a730;color:#1b1410"><b>Anor Gold</b>#F6A730 · the sun, highlights</div>
+      <div class="swatch" style="background:#e2662a;color:#1b1410"><b>Ember</b>#E2662A · logo, CTAs</div>
+      <div class="swatch" style="background:#e9b98a;color:#1b1410"><b>Dune Sand</b>#E9B98A · horizon line, light UI</div>
+      <div class="swatch" style="background:#b5481f"><b>Mesa Rust</b>#B5481F · illustration</div>
+      <div class="swatch" style="background:#6e2a14"><b>Canyon</b>#6E2A14 · deep accents</div>
+      <div class="swatch" style="background:#4a7593"><b>Dusk Slate</b>#4A7593 · secondary, data viz</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">07 · Typography</div>
+    <h2>A warm serif with an engineer's sidekick.</h2>
+    <div class="type-spec">
+      <div><div class="label" style="color:var(--sand)">Display</div><p class="muted" style="margin-top:8px">Newsreader · 300–500<br/>Headlines, numbers</p></div>
+      <div style="font:400 56px/1.05 var(--display)">Clarity first. <em style="font-weight:300;color:var(--flare)">Then momentum.</em></div>
+    </div>
+    <div class="type-spec">
+      <div><div class="label" style="color:var(--sand)">Body</div><p class="muted" style="margin-top:8px">Inter · 400–600<br/>Kept from the current site</p></div>
+      <div style="font-size:19px;max-width:560px">We ship retrieval systems, agents and ML platforms that survive real users, and we tell you plainly what's worth building first.</div>
+    </div>
+    <div class="type-spec">
+      <div><div class="label" style="color:var(--sand)">Label</div><p class="muted" style="margin-top:8px">JetBrains Mono · 400–500<br/>Eyebrows, metrics, tags</p></div>
+      <div style="font:500 14px var(--mono);letter-spacing:.14em;color:var(--gold)">CASE 03 · ML PLATFORM · 6× FASTER DEPLOYS</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="label">08 · 3D &amp; motion toolkit</div>
+    <h2>What's running on this page.</h2>
+    <div class="grid g2" style="margin-top:30px; gap:56px">
+      <div>
+        <div class="fx"><h4>Living sun</h4><p>Shader surface with boiling granulation and a darker, warmer edge.</p><span class="lvl core">Built</span></div>
+        <div class="fx"><h4>Radiating corona</h4><p>Two layers of slow streamers and fine rays, plus a flickering fiery rim right at the edge.</p><span class="lvl core">Built</span></div>
+        <div class="fx"><h4>Flare bursts</h4><p>Every few seconds a flare brightens one spot on the edge and shoots outward through the corona.</p><span class="lvl core">Built</span></div>
+      </div>
+      <div>
+        <div class="fx"><h4>Sun docks into the logo</h4><p>The sun scrolls up with the hero, shrinks onto the horizon line in the header and cuts into the Horizon bands.</p><span class="lvl core">Built</span></div>
+        <div class="fx"><h4>Flare on intent</h4><p>Hover a button and the sun reaches toward it with a flickering jet. Send the form and a shockwave rolls out of the logo.</p><span class="lvl core">Built</span></div>
+        <div class="fx"><h4>Star field</h4><p>Faint stars behind everything, a few slowly twinkling, drifting slightly with scroll.</p><span class="lvl core">Built</span></div>
+        <div class="fx"><h4>Static fallback</h4><p>A still CSS sun and the finished logo for reduced motion, low-power devices, data saver and browsers without WebGL. The 3D code never loads. Add ?static to the URL to preview it.</p><span class="lvl core">Built</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="finale" id="contact">
+  <div class="wrap">
+    <svg class="mark" style="width:220px;height:124px"><use href="#horizon"/></svg>
+    <h2 style="margin-top:36px">Clarity first. <em>Then momentum.</em></h2>
+    <form class="contact-form" id="contact-form">
+      <input type="email" required placeholder="you@company.com" aria-label="Email" />
+      <button class="btn btn-primary" type="submit" data-intent>Let's light it up</button>
+    </form>
+    <p class="meta" style="margin-top:26px">hello@anorwe.com · anorwe.com · brand direction v0.4</p>
+  </div>
+</section>
+</main>
+
+<script type="module">
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches
+  const lowPower = (navigator.hardwareConcurrency || 8) <= 2
+    || (navigator.deviceMemory || 8) <= 2
+    || navigator.connection?.saveData === true
+  const hasWebGL = (() => {
+    try {
+      const c = document.createElement('canvas')
+      return !!(c.getContext('webgl2') || c.getContext('webgl'))
+    } catch { return false }
+  })()
+  const useStatic = new URLSearchParams(location.search).has('static') || reduced || lowPower || !hasWebGL
+
+  const dock = document.getElementById('dock')
+  if (useStatic) {
+    document.documentElement.classList.add('static')
+    dock.querySelector('use').setAttribute('href', '#horizon')
+  }
+  const sun = useStatic ? null : (await import('./sun.js')).mountSun(document.getElementById('sky'))
+
+  const lerp = (a, b, t) => a + (b - a) * t
+  const smooth = (e0, e1, x) => {
+    const t = Math.min(1, Math.max(0, (x - e0) / (e1 - e0)))
+    return t * t * (3 - 2 * t)
+  }
+
+  let smoothY = scrollY
+  let last = performance.now()
+  const settleUntil = last + 1000
+
+  function update(now) {
+    const dt = Math.min(0.05, (now - last) / 1000)
+    last = now
+    // The browser restores scroll position shortly after a reload; snap to it instead of animating.
+    const snap = reduced || now < settleUntil
+    smoothY = snap ? scrollY : smoothY + (scrollY - smoothY) * (1 - Math.pow(0.002, dt))
+    if (Math.abs(scrollY - smoothY) < 0.1) smoothY = scrollY
+
+    const W = innerWidth, H = innerHeight
+    const mobile = W < 700
+    const hero = mobile
+      ? { x: W * 0.66, y: H * 0.8, r: W * 0.2 }
+      : { x: W * 0.76, y: H * 0.52, r: Math.min(H * 0.16, W * 0.11) }
+
+    // Horizon mark viewBox is 10 30 100 56 with the sun centred at (60, 76), r = 44.
+    const b = dock.getBoundingClientRect()
+    const r = b.width * 0.44
+    const docked = { x: b.left + b.width * 0.5, y: b.top + b.height * (46 / 56) }
+    const horizon = b.top + b.height * (48.6 / 56)
+    const perched = { x: docked.x, y: horizon - r }
+
+    // Travel and shrink onto the horizon, go quiet and flat, then sink in as the bands cut through.
+    const p = Math.min(1, smoothY / (H * 0.9))
+    const travel = smooth(0, 0.68, p)
+    const sink = smooth(0.8, 1, p)
+    sun.target.x = lerp(hero.x, perched.x, travel)
+    sun.target.y = lerp(lerp(hero.y - smoothY, perched.y, travel), docked.y, sink)
+    sun.target.r = lerp(hero.r, r, smooth(0, 0.6, p))
+    sun.target.calm = smooth(0.6, 0.8, p)
+    sun.target.stripes = smooth(0.84, 1, p)
+    sun.view.horizon = p > 0.78 ? horizon : null
+
+    requestAnimationFrame(update)
+  }
+  if (sun) requestAnimationFrame(update)
+
+  // Flare on intent: the sun reaches toward whatever you're about to click.
+  let hovered = null
+  const aimAt = (el) => {
+    if (!sun) return
+    const b = el.getBoundingClientRect()
+    sun.intentOn(b.left + b.width / 2, b.top + b.height / 2)
+  }
+  for (const el of document.querySelectorAll('[data-intent]')) {
+    el.addEventListener('pointerenter', () => { hovered = el; aimAt(el) })
+    el.addEventListener('focus', () => { hovered = el; aimAt(el) })
+    for (const ev of ['pointerleave', 'blur']) el.addEventListener(ev, () => {
+      if (hovered === el) { hovered = null; sun?.intentOff() }
+    })
+  }
+  addEventListener('scroll', () => hovered && aimAt(hovered), { passive: true })
+  document.getElementById('contact-form').addEventListener('submit', (e) => {
+    e.preventDefault()
+    sun?.burst()
+    const btn = e.target.querySelector('button')
+    btn.textContent = "Sent. We'll be in touch."
+    btn.disabled = true
+  })
+
+  // Faint star field behind the content.
+  const stars = document.getElementById('stars')
+  const ctx = stars.getContext('2d')
+  let field = []
+  function seedStars() {
+    const dpr = Math.min(devicePixelRatio, 2)
+    stars.width = innerWidth * dpr
+    stars.height = innerHeight * dpr
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+    const count = Math.round((innerWidth * innerHeight) / 8000)
+    field = Array.from({ length: count }, () => ({
+      x: Math.random() * innerWidth,
+      y: Math.random() * innerHeight * 2,
+      r: 0.35 + Math.random() ** 3 * 0.9,
+      a: 0.08 + Math.random() ** 2 * 0.34,
+      tw: Math.random() < 0.3 ? 0.4 + Math.random() * 1.2 : 0,
+      ph: Math.random() * Math.PI * 2,
+    }))
+  }
+  function drawStars(now) {
+    const t = now / 1000
+    const H2 = innerHeight * 2
+    ctx.clearRect(0, 0, innerWidth, innerHeight)
+    for (const s of field) {
+      const y = (((s.y - scrollY * 0.05) % H2) + H2) % H2
+      if (y > innerHeight) continue
+      const twinkle = s.tw && !useStatic ? 0.6 + 0.4 * Math.sin(t * s.tw + s.ph) : 1
+      ctx.globalAlpha = s.a * twinkle
+      ctx.fillStyle = '#f6ecdd'
+      ctx.beginPath()
+      ctx.arc(s.x, y, s.r, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    if (!useStatic) requestAnimationFrame(drawStars)
+  }
+  addEventListener('resize', () => { seedStars(); if (useStatic) drawStars(0) })
+  seedStars()
+  requestAnimationFrame(drawStars)
+</script>
+</body>
+</html>
