@@ -50,7 +50,7 @@ const config = defineConfig({
         border: {
           DEFAULT: { value: "rgba(246,236,221,0.12)" },
         },
-        glass: { value: "rgba(13,20,32,0.55)" },
+        glass: { value: "rgba(13,20,32,0.72)" },
       },
     },
   },

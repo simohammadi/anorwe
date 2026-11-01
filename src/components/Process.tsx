@@ -19,7 +19,6 @@ export function Process() {
         overflow="hidden"
         border="1px solid"
         borderColor="border"
-        className="glass"
       >
         {processSteps.map((step) => (
           <Box as="li" key={step.title} bg={step.tint} px="6" pt={{ base: 7, md: 9 }} pb={{ base: 8, md: 10 }} minH={{ lg: "260px" }}>

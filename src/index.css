@@ -59,22 +59,6 @@ body,
   display: block;
 }
 
-/* Frosted panels. The blur sits on its own layer: iOS Safari clips borders on rounded backdrop-filter boxes. */
-.glass {
-  position: relative;
-  isolation: isolate;
-}
-.glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  pointer-events: none;
-}
-
 /* Sky collapses the hero's sun space while scrolling; anchoring would scroll it straight back. */
 html,
 body {

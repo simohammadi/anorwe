@@ -94,7 +94,7 @@ export function mountSun(container) {
           vec3 deep=vec3(0.85,0.30,0.07), mid=vec3(0.98,0.58,0.14), hot=vec3(1.0,0.88,0.52);
           vec3 col = mix(deep, mid, smoothstep(0.15,0.55,t));
           col = mix(col, hot, smoothstep(0.62,0.95,t));
-          float f = max(vN.z, 0.0);
+          float f = clamp(vN.z, 0.0, 1.0);
           col *= mix(0.72, 1.08, pow(f, 0.45));
           col += vec3(1.0,0.45,0.12)*pow(1.0-f, 3.0)*0.5;
           float a = atan(vPos.y, vPos.x + 1e-5);
