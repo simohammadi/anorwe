@@ -218,7 +218,10 @@ export function mountSun(container: HTMLElement): SunHandle {
   let W = 1
   let H = 1
   let dirty = true
+  // Resizing clears the canvas, so apply it inside a frame that renders straight after.
+  let resizePending = true
   const resize = () => {
+    resizePending = false
     W = container.clientWidth
     H = container.clientHeight
     renderer.setSize(W, H, false)
@@ -229,7 +232,9 @@ export function mountSun(container: HTMLElement): SunHandle {
     camera.updateProjectionMatrix()
     dirty = true
   }
-  const ro = new ResizeObserver(resize)
+  const ro = new ResizeObserver(() => {
+    if (container.clientWidth !== W || container.clientHeight !== H) resizePending = true
+  })
   ro.observe(container)
   resize()
 
@@ -245,6 +250,7 @@ export function mountSun(container: HTMLElement): SunHandle {
 
   const frame = () => {
     raf = requestAnimationFrame(frame)
+    if (resizePending) resize()
     const t = reduced ? 12 : clock.getElapsedTime()
     const dt = Math.min(0.05, t - last || 0.016)
     last = t

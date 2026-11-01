@@ -125,7 +125,7 @@ export function Contact() {
         border="1px solid"
         borderColor="border"
         bg="glass"
-        backdropFilter="blur(16px)"
+        className="glass"
       >
         <Stack gap="5">
           <Flex direction={{ base: "column", md: "row" }} gap="5">

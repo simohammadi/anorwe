@@ -20,7 +20,7 @@ export function Services() {
             border="1px solid"
             borderColor="border"
             bg="glass"
-            backdropFilter="blur(16px)"
+            className="glass"
             transition="border-color 0.25s ease"
             _hover={{ borderColor: "rgba(246,167,48,0.35)" }}
           >
