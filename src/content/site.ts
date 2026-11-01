@@ -15,7 +15,6 @@ export interface Principle {
 }
 
 export interface ProcessStep {
-  time: string
   title: string
   description: string
   tint: string
@@ -51,7 +50,7 @@ export const hero: {
   secondaryCta: string
   scrollHint: string
 } = {
-  eyebrow: 'Software engineering studio',
+  eyebrow: 'Builders that code',
   title: 'Clarity first.',
   titleAccent: 'Then momentum.',
   subtitle:
@@ -181,27 +180,23 @@ export const processIntro: { eyebrow: string; heading: string; subheading: strin
 
 export const processSteps: ProcessStep[] = [
   {
-    time: '05:40',
     title: 'Dawn',
     description:
       'First light. We map the problem, the constraints and what success looks like.',
     tint: 'rgba(29,26,42,0.6)',
   },
   {
-    time: '07:15',
     title: 'Rise',
     description: 'A working first version in weeks, tested with real users and real data.',
     tint: 'rgba(122,58,42,0.55)',
   },
   {
-    time: '12:00',
     title: 'Zenith',
     description:
       'Full strength. Hardened, monitored and load-tested so it holds up in production.',
     tint: 'rgba(181,98,47,0.5)',
   },
   {
-    time: 'All day',
     title: 'Daylight',
     description: 'Your team runs it in the open. We hand off cleanly and stay close.',
     tint: 'rgba(74,117,147,0.5)',

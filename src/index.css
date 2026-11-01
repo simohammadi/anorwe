@@ -54,6 +54,18 @@ body,
   display: block;
 }
 
+/* Sky collapses the hero's sun space while scrolling; anchoring would scroll it straight back. */
+html,
+body {
+  overflow-anchor: none;
+}
+.hero {
+  margin-bottom: calc(var(--collapse, 0px) * -1);
+}
+.scroll-hint {
+  opacity: calc(1 - var(--docking, 0));
+}
+
 /* Where the sun rests in the hero. On phones it gets its own space below the copy. */
 .sun-anchor {
   --r: min(16svh, 11vw);

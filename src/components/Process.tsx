@@ -23,10 +23,7 @@ export function Process() {
       >
         {processSteps.map((step) => (
           <Box as="li" key={step.title} bg={step.tint} px="6" pt={{ base: 7, md: 9 }} pb={{ base: 8, md: 10 }} minH={{ lg: "260px" }}>
-            <Text fontFamily="mono" fontSize="xs" letterSpacing="0.12em" textTransform="uppercase" opacity="0.7">
-              {step.time}
-            </Text>
-            <Heading as="h3" fontSize={{ base: "3xl", md: "34px" }} fontWeight="500" lineHeight="1.1" mt="2.5" mb="4">
+            <Heading as="h3" fontSize={{ base: "3xl", md: "34px" }} fontWeight="500" lineHeight="1.1" mb="4">
               {step.title}
             </Heading>
             <Text fontSize="15px" lineHeight="1.6" opacity="0.88" maxW={{ base: "420px", lg: "240px" }}>

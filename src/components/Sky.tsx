@@ -34,19 +34,60 @@ export function Sky() {
     function start(sun: SunHandle) {
       const dock = document.getElementById("dock")
       const anchor = document.getElementById("sun-anchor")
-      if (!dock || !anchor) return
+      const heroEl = document.getElementById("top")
+      const copy = heroEl?.querySelector<HTMLElement>(".hero-copy")
+      if (!dock || !anchor || !heroEl || !copy) return
+      const root = document.documentElement
+      const nextSection = heroEl.nextElementSibling instanceof HTMLElement ? heroEl.nextElementSibling : null
 
-      // Mobile browsers change innerHeight as the toolbar collapses; only react to real resizes.
-      let stableW = innerWidth
-      let stableH = innerHeight
-      const onResize = () => {
-        if (innerWidth !== stableW || Math.abs(innerHeight - stableH) > 160) {
-          stableW = innerWidth
-          stableH = innerHeight
-        }
-      }
+      const marginOf = (el: Element | null) => (el ? parseFloat(getComputedStyle(el).scrollMarginTop) || 0 : 0)
+      let nextMargin = marginOf(nextSection)
+      const onResize = () => (nextMargin = marginOf(nextSection))
       addEventListener("resize", onResize)
       cleanups.push(() => removeEventListener("resize", onResize))
+
+      // The hero gives up the space below its copy as the sun travels to the dock,
+      // and the sun settles into the logo just as the next section reaches the header.
+      const copyBottom = () => heroEl.offsetTop + copy.offsetTop + copy.offsetHeight
+      const progress = (y: number) => Math.min(1, y / Math.max(1, copyBottom() - nextMargin))
+      const travelAt = (p: number) => smooth(0, 0.68, p)
+      const spare = () => Math.max(0, heroEl.offsetHeight - copy.offsetTop - copy.offsetHeight)
+      let collapse = 0
+      cleanups.push(() => {
+        root.style.removeProperty("--collapse")
+        root.style.removeProperty("--docking")
+      })
+
+      // In-page links land where the section ends up once the space has collapsed.
+      const scrollToSection = (el: HTMLElement, behavior?: ScrollBehavior) => {
+        const margin = parseFloat(getComputedStyle(el).scrollMarginTop) || 0
+        const top = el.getBoundingClientRect().top + scrollY - margin
+        if (heroEl.contains(el)) return scrollTo({ top, behavior })
+        const s = spare()
+        const target = top + collapse
+        let lo = 0
+        let hi = Math.max(0, target)
+        for (let i = 0; i < 24; i++) {
+          const mid = (lo + hi) / 2
+          if (mid + s * travelAt(progress(mid)) < target) lo = mid
+          else hi = mid
+        }
+        scrollTo({ top: hi, behavior })
+      }
+      const onClick = (e: MouseEvent) => {
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+        const link = e.target instanceof Element ? e.target.closest<HTMLAnchorElement>('a[href^="#"]') : null
+        const el = link?.hash ? document.getElementById(decodeURIComponent(link.hash.slice(1))) : null
+        if (!link || !el) return
+        e.preventDefault()
+        history.pushState(null, "", link.hash)
+        scrollToSection(el)
+      }
+      document.addEventListener("click", onClick)
+      cleanups.push(() => document.removeEventListener("click", onClick))
+      const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined
+      const initial = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null
+      if (initial && nav?.type !== "reload" && nav?.type !== "back_forward") scrollToSection(initial, "instant")
 
       let smoothY = scrollY
       let last = performance.now()
@@ -75,8 +116,8 @@ export function Sky() {
         const perched = { x: docked.x, y: horizon - r }
 
         // Travel and shrink onto the horizon, go quiet and flat, then sink in as the bands cut through.
-        const p = Math.min(1, smoothY / (stableH * 0.9))
-        const travel = smooth(0, 0.68, p)
+        const p = progress(smoothY)
+        const travel = travelAt(p)
         const sink = smooth(0.8, 1, p)
         sun.target.x = lerp(hero.x, perched.x, travel)
         sun.target.y = lerp(lerp(hero.y, perched.y, travel), docked.y, sink)
@@ -84,6 +125,13 @@ export function Sky() {
         sun.target.calm = smooth(0.6, 0.8, p)
         sun.target.stripes = smooth(0.84, 1, p)
         sun.view.horizon = p > 0.78 ? horizon : null
+
+        const next = Math.round(spare() * travel)
+        if (next !== collapse) {
+          collapse = next
+          root.style.setProperty("--collapse", `${collapse}px`)
+          root.style.setProperty("--docking", travel.toFixed(3))
+        }
 
         raf = requestAnimationFrame(update)
       }

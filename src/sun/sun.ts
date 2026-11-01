@@ -118,7 +118,7 @@ export function mountSun(container: HTMLElement): SunHandle {
         float f = max(vN.z, 0.0);
         col *= mix(0.72, 1.08, pow(f, 0.45));
         col += vec3(1.0,0.45,0.12)*pow(1.0-f, 3.0)*0.5;
-        float a = atan(vPos.y, vPos.x);
+        float a = atan(vPos.y, vPos.x + 1e-5);
         float da = atan(sin(a-uFlareAng), cos(a-uFlareAng));
         col += vec3(1.0,0.8,0.5) * exp(-da*da*18.0) * pow(1.0-f, 1.5) * sin(3.14159*uFlarePhase) * 0.8;
         float di = atan(sin(a-uIntentAng), cos(a-uIntentAng));
@@ -153,7 +153,7 @@ export function mountSun(container: HTMLElement): SunHandle {
       varying vec2 vUv;
       ${NOISE}
       void main(){
-        vec2 p = vUv*2.0-1.0; float r = length(p); float a = atan(p.y,p.x);
+        vec2 p = vUv*2.0-1.0; float r = length(p); float a = atan(p.y, p.x + 1e-5);
         float d = max(r - uR, 0.0) / uR;
         vec2 q = vec2(cos(a), sin(a));
 
